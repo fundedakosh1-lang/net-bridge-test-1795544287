@@ -1,0 +1,11 @@
+name: bridge
+on:
+  push:
+    paths:
+      - '.github/workflows/bridge.yml'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "== bridge test =="; curl -s --max-time 15 https://api.ipify.org; echo; python3 --version; curl -s -o /dev/null -w "example.com %{http_code}\n" --max-time 15 https://example.com
