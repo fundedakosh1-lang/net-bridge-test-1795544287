@@ -6,4 +6,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          python3 -c "import urllib.request; urls=[\"https://www.aliexpress.com/w/wholesale-portable-blender.html\",\"https://www.alibaba.com/trade/search?SearchText=portable+blender\",\"https://www.temu.com/search_result.html?search_key=portable%20blender\",\"https://www.1688.com/\"]; [(print(u),print(urllib.request.urlopen(urllib.request.Request(u,headers={\"User-Agent\":\"Mozilla/5.0\"}),timeout=15).status)) for u in urls]"
+          curl -Ls --max-time 25 -A 'Mozilla/5.0' 'https://www.aliexpress.com/w/wholesale-portable-blender.html' | python3 -c 'import sys,re,html; d=sys.stdin.read(); print("bytes",len(d)); print("title",re.findall("<title[^>]*>(.*?)</title>",d,re.S)[:1]); print("prices",list(dict.fromkeys(re.findall(r"(?:US\$|\$)\s?\d+(?:\.\d{1,2})?",html.unescape(d))))[:30]); print("matches",[html.unescape(x)[:250] for x in re.findall(r".{0,80}(?:portable blender|juicer|US\$\d+).{0,130}",d,re.I)[:15]])'
